@@ -7,6 +7,7 @@
       curl
       wget
       git
+      fzf
     ];
 
     shells = [

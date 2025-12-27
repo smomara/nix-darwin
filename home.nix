@@ -34,6 +34,7 @@ in
       EDITOR = "hx";
       VISUAL = "hx";
       PAGER = "less";
+      SHELL = "${pkgs.nushell}/bin/nu";
     };
 
     file = {
@@ -65,9 +66,19 @@ in
   };
 
   programs = {
-    nushell.enable = true;
+    nushell = {
+      enable = true;
+      extraConfig = ''
+        $env.PATH = [ "~/.nix-profile/bin" "/run/current-system/sw/bin" "/etc/profiles/per-user/somara/bin" ] ++ $env.PATH
+      '';
+    };
 
-    kitty.enable = true;
+    kitty = {
+      enable = true;
+      settings = {
+        shell = "${pkgs.nushell}/bin/nu";
+      };
+    };
 
     ssh = {
       enable = true;
