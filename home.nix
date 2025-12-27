@@ -1,12 +1,12 @@
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
 
 let
   sshPublicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBpk+A7VTz5xCg1hfjSViJXTz0sT3SMq1c6c2+5YO8KP mseanomara@gmail.com";
+  email = "mseanomara@gmail.com";
+  name = "Sean O'Mara";
 
   conversionOfStPaul = pkgs.fetchurl {
     url = "https://api.nga.gov/iiif/50a2866d-de51-4824-a6b6-6c8643d94335/full/full/0/default.jpg?attachment_filename=the_conversion_of_saint_paul_1961.9.43.jpg";
@@ -27,36 +27,47 @@ in
       haskell-language-server
       hlint
       nil
-
-      kitty
-      nerd-fonts.fira-code
-
       spotify
     ];
 
     sessionVariables = {
       EDITOR = "hx";
       VISUAL = "hx";
+      PAGER = "less";
     };
 
     file = {
-      "paul-tintoretto.jpg".source = conversionOfStPaul;
-      ".ssh/allowed_signers".text = "mseanomara@gmail.com ${sshPublicKey}";
-
-      ".config/kitty/kitty.conf".text = ''
-        font_family       FiraCode Nerd Font Mono
-        font_size         13.0
-        disable_ligatures never
-      '';
+      ".ssh/allowed_signers" = {
+        text = "${email} ${sshPublicKey}";
+      };
     };
+  };
 
-    activation.setWallpaper = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      $DRY_RUN_CMD /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "${config.home.homeDirectory}/paul-tintoretto.jpg"'
-    '';
+  stylix = {
+    enable = true;
+    autoEnable = true;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark.yaml";
+    image = conversionOfStPaul;
+    polarity = "dark";
+
+    fonts = {
+      monospace = {
+        package = pkgs.nerd-fonts.fira-code;
+        name = "FiraCode Nerd Font Mono";
+      };
+      sizes = {
+        applications = 12;
+        terminal = 13;
+        desktop = 12;
+        popups = 12;
+      };
+    };
   };
 
   programs = {
-    bash.enable = true;
+    nushell.enable = true;
+
+    kitty.enable = true;
 
     ssh = {
       enable = true;
@@ -65,6 +76,7 @@ in
       matchBlocks = {
         "github.com" = {
           identityFile = "~/.ssh/id_ed25519";
+          addKeysToAgent = "yes";
         };
       };
     };
@@ -73,11 +85,23 @@ in
       enable = true;
       settings = {
         user = {
-          name = "Sean O'Mara";
-          email = "mseanomara@gmail.com";
+          name = name;
+          email = email;
         };
 
         core.editor = "hx";
+
+        init = {
+          defaultBranch = "master";
+        };
+
+        push = {
+          autoSetupRemote = true;
+        };
+
+        pull = {
+          rebase = true;
+        };
 
         gpg.format = "ssh";
         user.signingkey = "~/.ssh/id_ed25519.pub";
@@ -89,11 +113,11 @@ in
     helix = {
       enable = true;
       settings = {
-        theme = "gruvbox_dark_hard";
         editor = {
           line-number = "relative";
           cursorline = true;
           color-modes = true;
+          lsp.display-messages = true;
         };
       };
 
