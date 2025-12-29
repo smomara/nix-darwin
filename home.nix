@@ -28,6 +28,8 @@ in
       hlint
       nil
       spotify
+      direnv
+      nix-direnv
     ];
 
     sessionVariables = {
@@ -69,7 +71,7 @@ in
     nushell = {
       enable = true;
       extraConfig = ''
-        $env.PATH = [ "~/.nix-profile/bin" "/run/current-system/sw/bin" "/etc/profiles/per-user/somara/bin" ] ++ $env.PATH
+        $env.PATH = [ "~/.nix-profile/bin" "/run/current-system/sw/bin" "/etc/profiles/per-user/somara/bin" "/nix/var/nix/profiles/default/bin" ] ++ $env.PATH
       '';
     };
 
