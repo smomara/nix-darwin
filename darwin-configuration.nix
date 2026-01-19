@@ -10,10 +10,6 @@
       fzf
     ];
 
-    shells = [
-      pkgs.nushell
-    ];
-
     variables = {
       EDITOR = "vim";
     };
@@ -45,7 +41,6 @@
   users.users.somara = {
     name = "somara";
     home = "/Users/somara";
-    shell = pkgs.nushell;
   };
 
   security.pam.services.sudo_local.touchIdAuth = true;

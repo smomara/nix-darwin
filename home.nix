@@ -36,7 +36,6 @@ in
       EDITOR = "hx";
       VISUAL = "hx";
       PAGER = "less";
-      SHELL = "${pkgs.nushell}/bin/nu";
     };
 
     file = {
@@ -68,18 +67,28 @@ in
   };
 
   programs = {
-    nushell = {
+    fzf = {
       enable = true;
-      extraConfig = ''
-        $env.PATH = [ "~/.nix-profile/bin" "/run/current-system/sw/bin" "/etc/profiles/per-user/somara/bin" "/nix/var/nix/profiles/default/bin" ] ++ $env.PATH
-      '';
+      enableZshIntegration = true;
+    };
+
+    zsh = {
+      enable = true;
+      enableCompletion = true;
+      autosuggestion.enable = true;
+      syntaxHighlighting.enable = true;
+
+      history = {
+        ignoreDups = true;
+      };
+    };
+
+    starship = {
+      enable = true;
     };
 
     kitty = {
       enable = true;
-      settings = {
-        shell = "${pkgs.nushell}/bin/nu";
-      };
     };
 
     ssh = {
