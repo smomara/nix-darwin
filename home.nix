@@ -36,6 +36,7 @@ in
       EDITOR = "hx";
       VISUAL = "hx";
       PAGER = "less";
+      SHELL = "zsh";
     };
 
     file = {

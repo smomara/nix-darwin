@@ -10,6 +10,8 @@
       fzf
     ];
 
+    shells = [ pkgs.zsh ];
+
     variables = {
       EDITOR = "vim";
     };
@@ -41,6 +43,7 @@
   users.users.somara = {
     name = "somara";
     home = "/Users/somara";
+    shell = pkgs.zsh;
   };
 
   security.pam.services.sudo_local.touchIdAuth = true;
